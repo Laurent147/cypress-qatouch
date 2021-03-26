@@ -97,6 +97,10 @@ if you choose last option update package.json with:
 
 *in progress*
 
+## Acknowledgments
+
+* [PremnathM](https://github.com/premnathm) and [Ahilmurugesan](https://github.com/Ahilmurugesan), authors of the [cypress-qatouch-reporter](https://github.com/gitdckap/cypress-qatouch-reporter) repository that was forked.
+
 ## References
 - https://www.npmjs.com/package/cypress-qatouch-api
 - https://qatouch.com/
