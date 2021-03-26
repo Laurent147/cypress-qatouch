@@ -38,16 +38,14 @@ Add reporter to cypress.json file:
 ```
 Options definitions
 
-```javascript
-{
-    domain: <string> domain name of your QA Touch instance (e.g. yourDomain.qatouch.com),
-    apiToken: <string> API token for user which can be created in the edit profile menu in your domain login,
-    projectKey: <string> project key with which the tests are associated. Can be found in the browser URI when on your project page,
+```Json
+domain: "<string> domain name of your QA Touch instance (e.g. yourDomain.qatouch.com)"
+apiToken: "<string> API token for user which can be created in the edit profile menu in your domain login"
+projectKey: "<string> `project key with which the tests are associated. Can be found in the browser URI when on your project page"
     //(e.g. vEyp from yourDomain.qatouch.com/project/overview/p/vEyp)
-    testRunID: <string> test run Id with which the tests are associated.Can be found in the browser URI when on your test run page,
-    //(e.g.g67W from yourDomain.qatouch.com/testrun/p/vEyp/tid/g67W)
-    isModules: <boolean> [optional] True to pull down test cases based on project > modules structure. Default: false
-}
+testRunID: "<string> test run Id with which the tests are associated.Can be found in the browser URI when on your test run page"
+                //(e.g.g67W from yourDomain.qatouch.com/testrun/p/vEyp/tid/g67W)
+isModules: "<boolean> [optional] True to pull down test cases based on project > modules structure." Default: false
 ```
 **2. Make sure test case ID are in your test names**
 
