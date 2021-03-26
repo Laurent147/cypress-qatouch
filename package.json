@@ -1,8 +1,8 @@
 {
   "name": "cypress-qatouch-api",
-  "version": "2.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "1.0.0",
+  "description": "QA touch - cypress integration module",
+  "main": "./index.js",
   "scripts": {
     "test": "cypress run"
   },
@@ -16,10 +16,8 @@
   ],
   "author": "Laurent147",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "axios": "^0.21.1",
-    "cypress": "^6.8.0",
-    "mocha": "^8.3.2",
-    "typescript": "^4.2.3"
+    "mocha": "^8.3.2"
   }
 }
