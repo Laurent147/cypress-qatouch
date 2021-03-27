@@ -80,18 +80,33 @@ or
 if you choose last option update package.json with:
 ```json
 {
-    ...
     "script": {
         "test": "cypress run"
     }
-    ...
 }
 ```
 
 
 ## Test case pull-down and update
+**1. Create a js file to require and invoke the folder builder function**
+```javascript
+const Builder = require("cypress-qatouch/FolderBuilder");
 
-*in progress*
+new Builder({
+    domain: "_your_Domain_",
+    apiToken: process.env._Your_API_Token_
+}).buildFolders();
+```
+> ⚠️ You may hard code your apiToken in the file for testing but it's best practice to load it from environment variable or secret manager.
+
+**2. Set up package.json script to launch the file**
+```json
+{
+    "script": {
+        "qaPull": "node ./path/to/file.js"
+    }
+}
+```
 
 ## Acknowledgments
 

@@ -1,16 +1,19 @@
 const   path        = require("path");
-const   Qatouch     = require("./qatouchapi");
+const   Qatouch     = require("./src/qatouchapi");
 const   fs          = require("fs");
 
 class FolderBuilder {
     /**
      * @constructor
      * @param {*} options 
-     * json object {domain: string, apiToken: string, projectKey: string, testRunId: string, isModules?: boolean }
+     * json object {domain: string, apiToken: string, fileExt?: string = ".spec.js"}
      */
     constructor(options){
         this.qa = new Qatouch(options);
         options.isModules = options.isModules || false;
+        options.fileExt = options.fileExt || ".spec.js";
+
+        console.log(options.fileExt);
 
         /**
          * Describes the data structure of QA touch projects, sections and cases
@@ -61,7 +64,7 @@ class FolderBuilder {
         }
 
         this.fileTemplate ={
-            ext: "ts",
+            ext: options.fileExt,
             text: `
                 describe("__", () => {
                     it("TR-__CaseId__ __CaseTitle__", () => {
@@ -139,7 +142,7 @@ class FolderBuilder {
     
         if(Array.isArray(data[level.array]) && data[level.array].length > 0){
             data[level.array].forEach(async el => {
-                const addKey = (level.type == "file" ? `.spec.${fileTemplate.ext}` : `-${el[level.key]}`)
+                const addKey = (level.type == "file" ? `${fileTemplate.ext}` : `-${el[level.key]}`)
                 const name = `${el[level.name]}${addKey}`
                 if(!fs.existsSync(path.join(folderPath,name))){
                     if(level.type === "folder"){
@@ -152,7 +155,7 @@ class FolderBuilder {
                             console.log(err);
                         })
                     }else if(level.type === "file"){
-                        let fileName = el[level.name] + ".spec.ts";
+                        let fileName = name;
                         fsPromise.open(path.join(folderPath, fileName), "a")
                         .then(async fileHandle => {
                             console.log(`File ${fileName} has been created`);                        
@@ -162,7 +165,7 @@ class FolderBuilder {
                             testCase = testCase.replace(/__CaseTitle__/,el[level.name]);
                             await fsPromise.appendFile(fileHandle, testCase);
                             
-                            console.log(`Template test case has been appended to file ${fileName}.spec.ts`);                        
+                            console.log(`Template test case has been appended to file ${fileName}`);                        
     
                             fileHandle.close();
                         })
@@ -187,6 +190,23 @@ class FolderBuilder {
         this.buildQaData().then((res) => {
             this.updateFolder(this.baseFolderPath, res, -1, this.levels, this.fileTemplate);
         })
+    }
+
+    /**
+     * Validate function
+     *
+     * Validates the existance of a key
+     * @param {*} options reporterOptions object define in cypress.json
+     * @param {string} name key to validate
+     * @private
+     */
+    validate(options, name) {
+        if (options == null) {
+            throw new Error('Missing reporterOptions in cypress.json');
+        }
+        if (options[name] == null) {
+            throw new Error("Missing " + name + " value. Please update reporterOptions in cypress.json");
+        }
     }
 }
 

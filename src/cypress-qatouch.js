@@ -1,7 +1,6 @@
 'use strict';
 const Qatouch         = require("./qatouchapi.js");
 const Mocha           = require("mocha");
-const FolderBuilder   = require("./FolderBuilder.js");
 
 const {
   EVENT_RUN_BEGIN,
@@ -20,7 +19,7 @@ const Spec = Mocha.reporters.Spec;
  * 
  * Manages cypress/mocha test runner event and publishes results to QA Touch
  */
-class CypressQaTouchReporter extends Spec{
+class CypressQaTouch extends Spec{
   /**
    * 
    * @param {*} runner 
@@ -30,12 +29,9 @@ class CypressQaTouchReporter extends Spec{
   constructor(runner, options) {
     super(runner, options)
     
-    // console.log(cypress.env.apiToken);
-    
     this._indents = 0;
     this.results = [];
     
-    const stats = runner.stats;
     const reporterOptions = options.reporterOptions;
     
     this.validate(reporterOptions, 'domain');
@@ -43,8 +39,8 @@ class CypressQaTouchReporter extends Spec{
     this.validate(reporterOptions, 'projectKey');
     this.validate(reporterOptions, 'testRunId');
     
+    this.stats = runner.stats;
     this.qatouch = new Qatouch(reporterOptions);
-    this.folderBuilder = new FolderBuilder(reporterOptions);
     
     runner.once(EVENT_RUN_BEGIN, () => {
         console.log('start');
@@ -71,7 +67,7 @@ class CypressQaTouchReporter extends Spec{
     })
 
     runner.once(EVENT_RUN_END, () => {
-      console.log(`end: ${stats.passes}/${stats.passes + stats.failures} ok`);
+      console.log(`end: ${this.stats.passes}/${this.stats.passes + this.stats.failures} ok`);
       if (this.results.length === 0) {
         console.warn("No test cases were matched. Ensure that your tests are declared correctly and matches TRxxx");
         return;
@@ -82,6 +78,7 @@ class CypressQaTouchReporter extends Spec{
       .then(values => console.log(values))
 
     })
+    
   }
 
   /**
@@ -145,10 +142,6 @@ class CypressQaTouchReporter extends Spec{
 
     return Promise.all(msg)
   }
-
-  buildFolders(){
-    this.folderBuilder.buildFolders();
-  }
   
   //All the indent function arent' really used much
   /**
@@ -177,4 +170,4 @@ class CypressQaTouchReporter extends Spec{
 
 }
 
-module.exports = CypressQaTouchReporter;
+module.exports = CypressQaTouch;
