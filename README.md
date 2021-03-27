@@ -1,18 +1,15 @@
 # Cypress / QA Touch API module
 
-* Pulls down test cases with template test snippet including case key. Pull can be done by
-  * Project > Module (or section) > Test case
-  * Project > Test run > Test Case
+* Pulls down test cases with template test snippet including case key. Pull can be done by Project > Test run > Test Case
+
 * Pushes test results into QA Touch system.
 
-> ⚠️ Only the test run structure works with the reporter push integration
-> 
-> ⚠️ Module structure isn't available through the public QA Touch api at the moment so all test cases are created in test run level folder
+> ⚠️ Test Run Module structure isn't available through the public QA Touch api at the moment so all test cases are created in test run level folder
 
 ## Installation
 
 ```shell
-$ npm i cypress-qatouch-api
+$ npm i cypress-qatouch
 ```
 
 ## Reporter push usage
@@ -45,7 +42,6 @@ projectKey: "<string> `project key with which the tests are associated. Can be f
             //(e.g. vEyp from yourDomain.qatouch.com/project/overview/p/vEyp)
 testRunID: "<string> test run Id with which the tests are associated.Can be found in the browser URI when on your test run page"
             //(e.g.g67W from yourDomain.qatouch.com/testrun/p/vEyp/tid/g67W)
-isModules: "<boolean> [optional] True to pull down test cases based on project > modules structure." Default: false
 ```
 **2. Make sure test case ID are in your test names**
 
@@ -54,7 +50,7 @@ Suite name has no effect on the push to QA Touch.
 
 ```Javascript
 describe("__", () => {
-    it("TR-48alw login 2", () => {
+    it("TR-48alw title_of_your_testCase", () => {
         //write test case final assertion here
     })
 })
