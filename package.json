@@ -1,5 +1,5 @@
 {
-  "name": "cypress-qatouch-api",
+  "name": "cypress-qatouch",
   "version": "1.0.0",
   "description": "QA touch - cypress integration module",
   "main": "./index.js",
@@ -19,5 +19,14 @@
   "dependencies": {
     "axios": "^0.21.1",
     "mocha": "^8.3.2"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Laurent147/cypress-qatouch-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Laurent147/cypress-qatouch-api/issues"
+  },
+  "homepage": "https://github.com/Laurent147/cypress-qatouch-api#readme"
 }
