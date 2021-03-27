@@ -1,6 +1,6 @@
 {
   "name": "cypress-qatouch",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "QA touch - cypress integration module",
   "main": "./index.js",
   "scripts": {
