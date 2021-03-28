@@ -116,9 +116,9 @@ options = {
     integrationFolder: "your/custom/cypress/integration/folder" //optional. Default: "cypress/integration"
 }
 ```
-> ⚠️ You may hard code your apiToken in the file for testing but it's best practice to load it from environment variable or secret manager.
+⚠️ You may hard code your apiToken in the file for testing but it's best practice to load it from environment variable or secret manager.
 
->IntegrationFolder folder path should be relative to node current working directory (process.cwd()). If the folders don't exist, they will be created before pulling down data from QA Touch.
+IntegrationFolder folder path should be relative to node current working directory (process.cwd()). If the folders don't exist, they will be created before pulling down data from QA Touch.
 
 **2. Set up package.json script to launch the file**
 ```json
