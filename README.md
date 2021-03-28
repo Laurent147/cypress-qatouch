@@ -4,7 +4,7 @@
 
 * Pushes test results into QA Touch system.
 
-> ⚠️ Test Run Module structure isn't available through the public QA Touch api at the moment so all test cases are created in test run level folder
+> ⚠️ Test Run Module structure isn't available through QA Touch's api at the moment so all test cases are created in test run level folder.
 
 ## Installation
 
@@ -27,8 +27,7 @@ Add reporter to cypress.json file:
         "domain" : "your-domain",
         "apiToken": "your-token",
         "projectKey": "project-key",
-        "testRunId": "test-run-id",
-        "isModules": false //optional, default: false
+        "testRunId": "test-run-id"
     },
     ...
 
@@ -77,27 +76,49 @@ or
     npm test
 ```
 
-if you choose last option update package.json with:
+if you choose the last option update package.json with:
 ```json
-{
+    ...
     "script": {
         "test": "cypress run"
     }
-}
+    ...
 ```
 
 
 ## Test case pull-down and update
+The pull down function only re-create in cypress' integration folder the projects and test runs as folders, including their respective keys. It will then create a template file for each test case within the testrun with the test case title and test run key (which is used to report back to QA Touch).
+If a folder or a file already exist it will be ignored.
+
+Default template code example:
+```javascript
+describe("__", () => {
+    it("TR-wE8hf button should do something when clicked", () => {
+        //write test case final assertion here
+    })
+})
+
+```
+
 **1. Create a js file to require and invoke the folder builder function**
 ```javascript
 const Builder = require("cypress-qatouch/FolderBuilder");
 
-new Builder({
+new Builder(options).buildFolders();
+```
+
+### Options
+```javascript
+options = {
     domain: "_your_Domain_",
     apiToken: process.env._Your_API_Token_
-}).buildFolders();
+    fileExt: ".your.ext.js" //Optional. Default: ".spec.js"
+    integrationFolder: "your/custom/cypress/integration/folder" //optional. Default: "cypress/integration"
+}
 ```
 > ⚠️ You may hard code your apiToken in the file for testing but it's best practice to load it from environment variable or secret manager.
+
+>IntegrationFolder folder path should be relative to node current working directory (process.cwd()). If the folders don't exist, they will be created before pulling down data from QA Touch.
 
 **2. Set up package.json script to launch the file**
 ```json
@@ -107,13 +128,17 @@ new Builder({
     }
 }
 ```
+**3. Run npm command**
+```shell
+npm run qaPull
+```
 
 ## Acknowledgments
 
 * [PremnathM](https://github.com/premnathm) and [Ahilmurugesan](https://github.com/Ahilmurugesan), authors of the [cypress-qatouch-reporter](https://github.com/gitdckap/cypress-qatouch-reporter) repository that was forked.
 
 ## References
-- https://www.npmjs.com/package/cypress-qatouch-api
+- https://www.npmjs.com/package/cypress-qatouch
 - https://qatouch.com/
 - https://help.qatouch.com/
 - https://doc.qatouch.com/

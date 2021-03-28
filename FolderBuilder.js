@@ -6,14 +6,35 @@ class FolderBuilder {
     /**
      * @constructor
      * @param {*} options 
-     * json object {domain: string, apiToken: string, fileExt?: string = ".spec.js"}
+     * json object {domain: string, apiToken: string, fileExt?: string = ".spec.js", 
+     * integrationFolder: string = "/cypress/integration"}
      */
     constructor(options){
         this.qa = new Qatouch(options);
         options.isModules = options.isModules || false;
         options.fileExt = options.fileExt || ".spec.js";
 
-        console.log(options.fileExt);
+
+        options.integrationFolder = options.integrationFolder || 'cypress/integration'
+        this.baseFolderPath = path.join(process.cwd(), options.integrationFolder);
+        
+        if(!fs.existsSync(this.baseFolderPath)){
+            let paths = options.integrationFolder.split("/");
+            if(paths[0] == "." || paths[0] == "..") paths.shift()
+            makeFolder(process.cwd(),paths)
+        }
+
+        function makeFolder(folderPath, paths){
+            if(paths.length > 0){
+                let newFolder = path.join(folderPath, paths[0])
+                fs.mkdir(newFolder, () => {
+                        paths.shift();
+                        makeFolder(newFolder, paths);
+                    })
+            }else{
+                return;
+            }
+        }
 
         /**
          * Describes the data structure of QA touch projects, sections and cases
@@ -74,8 +95,6 @@ class FolderBuilder {
             `
 
         } 
-
-        this.baseFolderPath = path.join(process.cwd(), 'cypress/integration')
 
     }
 
