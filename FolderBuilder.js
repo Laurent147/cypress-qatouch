@@ -7,7 +7,8 @@ class FolderBuilder {
      * @constructor
      * @param {*} options 
      * json object {domain: string, apiToken: string, fileExt?: string = ".spec.js", 
-     * integrationFolder: string = "/cypress/integration"}
+     * integrationFolder?: string = "/cypress/integration",projectKeys?: string[] = [], 
+     * testRunKeys?: string[] = []}
      */
     constructor(options){
         this.validate(options, "domain");
@@ -124,7 +125,7 @@ class FolderBuilder {
         let projects = await this.qa.getAllProjects();
         qaData.projects.push(...projects)
     
-        if (filters.projectKeys.lenght > 0) qaData.projects = qaData.projects.filter(proj => filters.projectKeys.indexOf(proj.project_key) >= 0)
+        if (filters.projectKeys.length > 0) qaData.projects = qaData.projects.filter(proj => filters.projectKeys.indexOf(proj.project_key) >= 0)
     
         await Promise.all(
             qaData.projects.map(async proj => {
@@ -132,7 +133,7 @@ class FolderBuilder {
                 let testRuns = await this.qa.getAllTestRuns(proj.project_key);
                 proj.testRuns.push(...testRuns)
 
-                if(filters.testRunKeys.lenght > 0) proj.testRuns = proj.testRuns.filter(testRun => filters.testRunKeys.indexOf(testRun.testrun_key) >= 0)
+                if(filters.testRunKeys.length > 0) proj.testRuns = proj.testRuns.filter(testRun => filters.testRunKeys.indexOf(testRun.testrun_key) >= 0)
 
                 return await Promise.all(proj.testRuns.map(async testRun => {
                     testRun.results = [];
