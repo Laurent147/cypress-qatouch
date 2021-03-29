@@ -99,6 +99,7 @@ class FolderBuilder {
      * BuildQAData function
      * 
      * builds an object of all projects, modules and test cases in QA touch
+     * @param {} filters object defining filters for project and test run. {projectKeys: string, testRunKeys: string}
      * @private
      * @returns <Promise> fulfills with QA Touch data object
      * @example
