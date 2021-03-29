@@ -27,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/Laurent147/cypress-qatouch-api/issues"
   },
-  "homepage": "https://github.com/Laurent147/cypress-qatouch-api#readme"
+  "homepage": "https://github.com/Laurent147/cypress-qatouch-api#readme",
+  "devDependencies": {
+    "cypress": "^6.8.0"
+  }
 }
