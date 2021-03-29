@@ -42,6 +42,9 @@ projectKey: "<string> `project key with which the tests are associated. Can be f
 testRunID: "<string> test run Id with which the tests are associated.Can be found in the browser URI when on your test run page"
             //(e.g.g67W from yourDomain.qatouch.com/testrun/p/vEyp/tid/g67W)
 ```
+
+>note: for the moment the push can only be done for 1 project / 1 test run at the time. Functionality should be upgrade in the near future.
+
 **2. Make sure test case ID are in your test names**
 
 If you pulled down the test cases through the integration, make sure to rename the suite and write your tests within the template test included.
