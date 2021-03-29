@@ -10,10 +10,19 @@ class FolderBuilder {
      * integrationFolder: string = "/cypress/integration"}
      */
     constructor(options){
+        this.validate(options, "domain");
+        this.validate(options, "apiToken");
+
         this.qa = new Qatouch(options);
+
         options.isModules = options.isModules || false;
         options.fileExt = options.fileExt || ".spec.js";
-
+        options.projectKeys = options.projectKeys || [];
+        options.testRunKeys = options.testRunKeys || [];
+        this.filters = {
+            projectKeys: options.projectKeys,
+            testRunKeys: options.testRunKeys
+        }
 
         options.integrationFolder = options.integrationFolder || 'cypress/integration'
         this.baseFolderPath = path.join(process.cwd(), options.integrationFolder);
@@ -21,19 +30,7 @@ class FolderBuilder {
         if(!fs.existsSync(this.baseFolderPath)){
             let paths = options.integrationFolder.split("/");
             if(paths[0] == "." || paths[0] == "..") paths.shift()
-            makeFolder(process.cwd(),paths)
-        }
-
-        function makeFolder(folderPath, paths){
-            if(paths.length > 0){
-                let newFolder = path.join(folderPath, paths[0])
-                fs.mkdir(newFolder, () => {
-                        paths.shift();
-                        makeFolder(newFolder, paths);
-                    })
-            }else{
-                return;
-            }
+            this.makeFolder(process.cwd(),paths)
         }
 
         /**
@@ -118,7 +115,7 @@ class FolderBuilder {
      *       }]
      *   }]}
      */
-    async buildQaData() {
+    async buildQaData(filters){
         let qaData = {
             projects: []
         };
@@ -126,11 +123,16 @@ class FolderBuilder {
         let projects = await this.qa.getAllProjects();
         qaData.projects.push(...projects)
     
+        qaData.projects = qaData.projects.filter(proj => filters.projectKeys.indexOf(proj.project_key) >= 0)
+    
         await Promise.all(
             qaData.projects.map(async proj => {
                 proj.testRuns = [];
                 let testRuns = await this.qa.getAllTestRuns(proj.project_key);
                 proj.testRuns.push(...testRuns)
+
+                proj.testRuns = proj.testRuns.filter(testRun => filters.testRunKeys.indexOf(testRun.testrun_key) >= 0)
+
                 return await Promise.all(proj.testRuns.map(async testRun => {
                     testRun.results = [];
                     let results = await this.qa.getAllTestRunsResults(proj.project_key, testRun.testrun_key)
@@ -206,7 +208,7 @@ class FolderBuilder {
     }
 
     buildFolders(){
-        this.buildQaData().then((res) => {
+        this.buildQaData(this.filters).then((res) => {
             this.updateFolder(this.baseFolderPath, res, -1, this.levels, this.fileTemplate);
         })
     }
@@ -225,6 +227,26 @@ class FolderBuilder {
         }
         if (options[name] == null) {
             throw new Error("Missing " + name + " value. Please update reporterOptions in cypress.json");
+        }
+    }
+
+    /**
+     * Recursively creates folders based on a supplied array of names.
+     * Folders are created in the order of the array.
+     *  
+     * @param {string} folderPath base folder where the folders should be created
+     * @param {string[]} paths array of folder names
+     * @returns 
+     */
+    makeFolder(folderPath, paths) {
+        if (paths.length > 0) {
+            let newFolder = path.join(folderPath, paths[0])
+            fs.mkdir(newFolder, () => {
+                paths.shift();
+                this.makeFolder(newFolder, paths);
+            })
+        } else {
+            return;
         }
     }
 }

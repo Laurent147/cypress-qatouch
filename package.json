@@ -20,7 +20,6 @@
     "axios": "^0.21.1",
     "mocha": "^8.3.2"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Laurent147/cypress-qatouch-api.git"
