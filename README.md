@@ -114,11 +114,15 @@ options = {
     apiToken: process.env._Your_API_Token_
     fileExt: ".your.ext.js" //Optional. Default: ".spec.js"
     integrationFolder: "your/custom/cypress/integration/folder" //optional. Default: "cypress/integration"
+    projectKeys: ["key1", "key2"] //optional. Default: [] (all projects)
+    testRunKeys: ["keyA", "keyB"] //optional. Default: [] (all test runs)
 }
 ```
 ⚠️ You may hard code your apiToken in the file for testing but it's best practice to load it from environment variable or secret manager.
 
 IntegrationFolder folder path should be relative to node current working directory (process.cwd()). If the folders don't exist, they will be created before pulling down data from QA Touch.
+
+Creation of folders and test cases can be filter to a sub-set of projects and test runs which your api key has access to. If omitted, the script will pull all.
 
 **2. Set up package.json script to launch the file**
 ```json
