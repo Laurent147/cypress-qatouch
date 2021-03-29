@@ -123,7 +123,7 @@ class FolderBuilder {
         let projects = await this.qa.getAllProjects();
         qaData.projects.push(...projects)
     
-        qaData.projects = qaData.projects.filter(proj => filters.projectKeys.indexOf(proj.project_key) >= 0)
+        if (filters.projectKeys.lenght > 0) qaData.projects = qaData.projects.filter(proj => filters.projectKeys.indexOf(proj.project_key) >= 0)
     
         await Promise.all(
             qaData.projects.map(async proj => {
@@ -131,7 +131,7 @@ class FolderBuilder {
                 let testRuns = await this.qa.getAllTestRuns(proj.project_key);
                 proj.testRuns.push(...testRuns)
 
-                proj.testRuns = proj.testRuns.filter(testRun => filters.testRunKeys.indexOf(testRun.testrun_key) >= 0)
+                if(filters.testRunKeys.lenght > 0) proj.testRuns = proj.testRuns.filter(testRun => filters.testRunKeys.indexOf(testRun.testrun_key) >= 0)
 
                 return await Promise.all(proj.testRuns.map(async testRun => {
                     testRun.results = [];
