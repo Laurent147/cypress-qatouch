@@ -11,6 +11,10 @@
   - [1. Create a js file to require and invoke the folder builder function](#1-create-a-js-file-to-require-and-invoke-the-folder-builder-function)
   - [2. Set up package.json script to launch the file](#2-set-up-packagejson-script-to-launch-the-file)
   - [3. Run npm command](#3-run-npm-command)
+- [Using Gherkin / Cucumber](#using-gherkin--cucumber)
+  - [1. Set-up](#1-set-up)
+  - [2. Pulling down from QA touch](#2-pulling-down-from-qa-touch)
+  - [3. Pushing to QA touch](#3-pushing-to-qa-touch)
 - [Acknowledgments](#acknowledgments)
 - [References](#references)
 
@@ -125,11 +129,11 @@ Only passed, untested and failed tests will be published in QA Touch Test Run.
 
 ## 3. Run cypress tests
 ```shell
-    npx cypress run
+   $ npx cypress run
 or
-    ./node_modules/.bin/cypress run
+   $ ./node_modules/.bin/cypress run
 or
-    npm test
+   $ npm test
 ```
 
 if you choose the last option update package.json with:
@@ -190,16 +194,71 @@ Creation of folders and test cases can be filter to a sub-set of projects and te
 ```
 ## 3. Run npm command
 ```shell
-npm run qaPull
+$ npm run qaPull
 ```
+# Using Gherkin / Cucumber
+## 1. Set-up
+install cypress-cucumber-preprocessor
+```shell
+$ npm i -D cypress-cucumber-preprocessor
+```
+Add to package.json 
+```json
+...
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true
+  }
+...
+```
+Add to cypress.json
+```json
+...
+"testFiles": "**/*.{feature, features}"
+...
+```
+Add preprocessor to cypress/plugins/index.js
+```javascript
+const cucumber = require('cypress-cucumber-preprocessor').default;
+/**
+ * @type {Cypress.PluginConfig}
+ */
+module.exports = (on, config) => {
+
+    require('dotenv').config();
+    config.reporterOptions.domain = process.env.QA_TOUCH_DOMAIN;
+    config.reporterOptions.apiToken = process.env.QA_TOUCH_APITOKEN;
+
+    on('file:preprocessor', cucumber());
+
+  return config;
+  }
+}
+```
+Find more set-up information for the packages on their [GitHub repo](https://github.com/TheBrainFamily/cypress-cucumber-preprocessor)
+
+## 2. Pulling down from QA touch
+*Functionality not yet implemented*
+
+## 3. Pushing to QA touch
+Make sure that the test case Ids (TR0001 or TR-eG5d) are added to the title of the **Scenario** tag
+```Gherkin
+Feature: Some feature title
+    Scenario: TR0001 some title TR-shE9D of a Test case TR0002
+        Given some situation
+        When something happens
+        Then expect a certain result
+```
+
 
 # Acknowledgments
 
 * [PremnathM](https://github.com/premnathm) and [Ahilmurugesan](https://github.com/Ahilmurugesan), authors of the [cypress-qatouch-reporter](https://github.com/gitdckap/cypress-qatouch-reporter) repository that was forked.
 
 # References
-- https://www.npmjs.com/package/cypress-qatouch
-- https://qatouch.com/
-- https://help.qatouch.com/
-- https://doc.qatouch.com/
+- [QA Touch home](https://qatouch.com/)
+- [QA Touch help](https://help.qatouch.com/)
+- [QA Touch api doc](https://doc.qatouch.com/)
+- [Cypress home](https://www.cypress.io/)
+- [Cypress doc](https://docs.cypress.io/guides/overview/why-cypress)
+- [Cucumber Gherkin doc](https://cucumber.io/docs/gherkin/reference/)
 
