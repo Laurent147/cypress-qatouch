@@ -92,6 +92,12 @@ module.exports = (on, config) => {
 
 Here npm's [dotenv package](https://www.npmjs.com/package/dotenv) is used to load environment variables from a root .env but you can use your prefered method.
 
+Template .env file:
+```
+QA_TOUCH_DOMAIN=
+QA_TOUCH_APITOKEN=
+```
+
 ## 2. Make sure test case ID are in your test names
 
 If you pulled down the test cases through the integration, make sure to rename the suite and write your tests within the template test included.
