@@ -1,7 +1,7 @@
 # Package Roadmap
 ## Push function
 * [ ] Add dynamic configuration based on ID in the project and test run folders
-* [ ] Improve loading of secrets (e.g. apiToken) from more secured location
+* [x] Improve loading of secrets (e.g. apiToken) from more secured location
 * [x] Concatenate multi test result for 1 test run key (logic, if 1 fail all fail)
 
 ## Pull function

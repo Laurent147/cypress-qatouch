@@ -4,6 +4,7 @@
   - [Installation](#installation)
 - [Reporter push usage](#reporter-push-usage)
   - [1. Add reporter to cypress.json](#1-add-reporter-to-cypressjson)
+    - [Secure your QA Touch credentials](#secure-your-qa-touch-credentials)
   - [2. Make sure test case ID are in your test names](#2-make-sure-test-case-id-are-in-your-test-names)
   - [3. Run cypress tests](#3-run-cypress-tests)
 - [Test case pull-down and update](#test-case-pull-down-and-update)
@@ -68,6 +69,28 @@ projectKey: "<string> `project key with which the tests are associated. Can be f
 testRunID: "<string> test run Id with which the tests are associated.Can be found in the browser URI when on your test run page"
             //(e.g.g67W from yourDomain.qatouch.com/testrun/p/vEyp/tid/g67W)
 ```
+
+### Secure your QA Touch credentials
+To load QA Touch's domain and apiToken information from environment variables add the following code to cypress/plugins/index.js
+
+```javascript
+
+/**
+ * @type {Cypress.PluginConfig}
+ */
+module.exports = (on, config) => {
+ 
+  if(config.reporterOptions){
+    require('dotenv').config(); //make sure to have dotenv package installed and set-up
+    config.reporterOptions.domain = process.env.QA_TOUCH_DOMAIN;
+    config.reporterOptions.apiToken = process.env.QA_TOUCH_APITOKEN;
+
+    return config;
+  }
+}
+```
+
+Here npm's [dotenv package](https://www.npmjs.com/package/dotenv) is used to load environment variables from a root .env but you can use your prefered method.
 
 ## 2. Make sure test case ID are in your test names
 
