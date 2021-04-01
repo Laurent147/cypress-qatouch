@@ -72,7 +72,6 @@ class CypressQaTouch extends Spec{
         console.warn("No test cases were matched. Ensure that your tests are declared correctly and matches TRxxx");
         return;
       }
-      console.log(this.results);
 
       this.determinePublishCalls(this.results)
       .then(values => console.log(values))
@@ -106,7 +105,6 @@ class CypressQaTouch extends Spec{
    * @returns {object} results array [{case_id: number, status_id: number}]
    */
   addToQatouchResults (status,title) {
-    console.log(`The status for ${title} was ${status}`);
     let status_id = Qatouch.statusConfig(status);
     let caseIds = Qatouch.titleToCaseIds2(title);
 
@@ -114,10 +112,10 @@ class CypressQaTouch extends Spec{
       return {
         case: caseId,
         status: (Number.isFinite(caseId) ? status_id : status.toLowerCase()),
+        statusId: status_id
       };
     });
-    this.results.push(...results);
-  
+    this.results.push(...results);  
   }
 
   /**
@@ -133,6 +131,11 @@ class CypressQaTouch extends Spec{
 
     let msg = [];
 
+    multiPublish = this.dedupeAndValidateStatus(multiPublish);
+    singlePublish = this.dedupeAndValidateStatus(singlePublish);
+
+    console.log(`results to be pushed: ${JSON.stringify([...multiPublish,...singlePublish])}`);
+
     if (multiPublish.length > 0) {
       msg.push(this.qatouch.publishResults(multiPublish));
     }
@@ -143,6 +146,19 @@ class CypressQaTouch extends Spec{
     return Promise.all(msg)
   }
   
+  dedupeAndValidateStatus(arr) {
+    let newArr = []
+    arr.sort((a, b) => ("" + a.case).localeCompare(("" + b.case)))
+      .forEach((el, i, a) => {
+        if (i != 0 && el.case == a[i - 1].case) {
+          if ( el.statusId >= a[i - 1].statusId ) newArr.splice(newArr.length - 1, 1, el)
+        } else {
+          newArr.push(el);
+        }
+      })
+    return newArr;
+  }
+
   //All the indent function arent' really used much
   /**
    * Indent function

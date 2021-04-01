@@ -110,13 +110,11 @@ class Qatouch{
      * @returns <Promise> fulfills json object {sucess: boolean, msg: string}
      */
     publishResults(results) {
-
         let endPoint = `testRunResults/status/multiple?project=${this.options.projectKey}
                         &test_run=${this.options.testRunId}&result=${JSON.stringify(results)}
                         &comments=Status changed by cypress automation script.`;
 
         return this.qaTouchApiCall('PATCH',endPoint,false)
-
     }
 
     /**
