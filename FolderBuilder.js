@@ -84,14 +84,12 @@ class FolderBuilder {
 
         this.fileTemplate ={
             ext: options.fileExt,
-            text: `
-                describe("__", () => {
-                    it("TR-__CaseId__ __CaseTitle__", () => {
-                        //write test case final assertion here
-                    })
-                })
-            `
-
+            text: 
+`describe("__", () => {
+    it("TR-__CaseId__ __CaseTitle__", () => {
+        //write test case final assertion here
+    })
+})`
         } 
 
     }
