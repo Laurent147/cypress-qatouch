@@ -43,18 +43,21 @@ class FolderBuilder {
                {
                    array: "projects",
                    name: "project_name",
+                   keyId: "P-",
                    key: "project_key",
                    type: "folder"
                },
                {
                    array: "sections",
                    name: "section_name",
+                   keyId: "S-",
                    key: "section_key",
                    type: "folder"
                },
                {
                    array: "cases",
                    name: "case_title",
+                   keyId: "C-",
                    key: "case_key",
                    type: "file"
                }
@@ -64,18 +67,21 @@ class FolderBuilder {
                 {
                     array: "projects",
                     name: "project_name",
+                    keyId: " P-",
                     key: "project_key",
                     type: "folder"
                 },
                 {
                     array: "testRuns",
                     name: "testrun_name",
+                    keyId: " R-",
                     key: "testrun_key",
                     type: "folder"
                 },
                 {
                     array: "results",
                     name: "title",
+                    keyId: "TR-",
                     key: "run_key",
                     type: "file"
                 }
@@ -86,7 +92,7 @@ class FolderBuilder {
             ext: options.fileExt,
             text: 
 `describe("__", () => {
-    it("TR-__CaseId__ __CaseTitle__", () => {
+    it("__CaseId__ __CaseTitle__", () => {
         //write test case final assertion here
     })
 })`
@@ -163,7 +169,7 @@ class FolderBuilder {
     
         if(Array.isArray(data[level.array]) && data[level.array].length > 0){
             data[level.array].forEach(async el => {
-                const addKey = (level.type == "file" ? `${fileTemplate.ext}` : `-${el[level.key]}`)
+                const addKey = (level.type == "file" ? `${fileTemplate.ext}` : `${level.keyId}${el[level.key]}`)
                 const name = `${el[level.name]}${addKey}`
                 if(!fs.existsSync(path.join(folderPath,name))){
                     if(level.type === "folder"){
@@ -182,7 +188,7 @@ class FolderBuilder {
                             console.log(`File ${fileName} has been created`);                        
                             
                             let testCase = fileTemplate.text;
-                            testCase = testCase.replace(/__CaseId__/,el[level.key]);
+                            testCase = testCase.replace(/__CaseId__/, `${level.keyId}${el[level.key]}`);
                             testCase = testCase.replace(/__CaseTitle__/,el[level.name]);
                             await fsPromise.appendFile(fileHandle, testCase);
                             

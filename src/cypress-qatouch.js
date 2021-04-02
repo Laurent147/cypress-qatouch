@@ -1,6 +1,7 @@
 'use strict';
 const Qatouch         = require("./qatouchapi.js");
 const Mocha           = require("mocha");
+const { cursor } = require("../index.js");
 
 const {
   EVENT_RUN_BEGIN,
@@ -33,6 +34,12 @@ class CypressQaTouch extends Spec{
     this.results = [];
     
     const reporterOptions = options.reporterOptions;
+
+    let testContext;
+    if(runner.suite.file && runner.suite.file != "") testContext =  this.getProjIdAndTestRunID(runner.suite.file);
+    console.log(testContext);
+    if(testContext) Object.assign(reporterOptions, testContext);
+
     
     this.validate(reporterOptions, 'domain');
     this.validate(reporterOptions, 'apiToken');
@@ -145,7 +152,13 @@ class CypressQaTouch extends Spec{
 
     return Promise.all(msg)
   }
-  
+
+  /**
+   * Reduce results array to 1 result per test case ID following the all or nothing logic
+   * 
+   * @param {atring[]} arr array of test results. [{case: string || number, statusId: number, ...}]
+   * @returns {string[]} deduped array of results
+   */
   dedupeAndValidateStatus(arr) {
     let newArr = []
     arr.sort((a, b) => ("" + a.case).localeCompare(("" + b.case)))
@@ -157,6 +170,15 @@ class CypressQaTouch extends Spec{
         }
       })
     return newArr;
+  }
+
+  getProjIdAndTestRunID(path) {
+    let res = [...path.matchAll(/\b[P|R]-([A-Za-z0-9]+)/g)];
+    return res.length == 0 ? null : res.reduce((acc, cur, i, a) => {
+      return a.length == 2 ? {projectKey: (cur[0].indexOf("P-") ? acc.projectKey : cur[1]),
+          testRunId: cur[0].indexOf("R-") ? acc.testRunKey : cur[1]
+        } : null;
+    }, {})
   }
 
   //All the indent function arent' really used much
