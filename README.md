@@ -35,7 +35,7 @@ From QA Touch:
 * Using the run_key Ids (TR-wR8dh) instead of the UI test case Ids (TR0001) will update the test case result but not the results history (each Id type use different API call)
 
 From the package:
-* Using multiple time the same test case Id in a test file will result in an all or nothing "passed" logic. All test within a test file with the same ID must "passed" to report "passed" to QA Touch.
+* Using multiple time the same test case Id in a test file will result in an all or nothing "passed" logic. All test within a test file with the same ID must "pass" to report "passed" to QA Touch.
 
 ## Installation
 

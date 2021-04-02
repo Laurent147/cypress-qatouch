@@ -10,7 +10,7 @@
   * e.g. *.spec.js, *.spec.ts, *.test.js, *.test.ts
 * [x] Add custom integration folder to create folders and test cases
 * [x] Add filtering capabilities on projects and test runs
-* [ ] Add support for cypress-cucumber-preprocessor and Gherkin style feature files
+* [x] Add support for cypress-cucumber-preprocessor and Gherkin style feature files
 * [ ] Add support for large (>50) dataset
 
 ## Other
