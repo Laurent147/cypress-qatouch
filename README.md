@@ -9,7 +9,7 @@
   - [2. Make sure test case ID are in your test names](#2-make-sure-test-case-id-are-in-your-test-names)
   - [3. Run cypress tests](#3-run-cypress-tests)
 - [Test case pull-down and update](#test-case-pull-down-and-update)
-  - [1. Create a js file to require and invoke the folder builder function](#1-create-a-js-file-to-require-and-invoke-the-folder-builder-function)
+  - [1. Create a qaPull.js file to require and invoke the folder builder function](#1-create-a-qapulljs-file-to-require-and-invoke-the-folder-builder-function)
   - [2. Set up package.json script to launch the file](#2-set-up-packagejson-script-to-launch-the-file)
   - [3. Run npm command](#3-run-npm-command)
 - [Using Gherkin / Cucumber](#using-gherkin--cucumber)
@@ -75,7 +75,7 @@ testRunID: "<string> test run Id with which the tests are associated.Can be foun
 ```
 
 ### Secure your QA Touch credentials
-To load QA Touch's domain and apiToken information from environment variables add the following code to cypress/plugins/index.js
+To load QA Touch's domain and apiToken information from environment variables add the following code to cypress/plugins/index.js (don't forget to remove the attributes for cypress.json)
 
 ```javascript
 
@@ -85,7 +85,7 @@ To load QA Touch's domain and apiToken information from environment variables ad
 module.exports = (on, config) => {
  
   if(config.reporterOptions){
-    require('dotenv').config(); //make sure to have dotenv package installed and set-up
+    require('dotenv').config(); //make sure to have dotenv package installed
     config.reporterOptions.domain = process.env.QA_TOUCH_DOMAIN;
     config.reporterOptions.apiToken = process.env.QA_TOUCH_APITOKEN;
 
@@ -158,7 +158,7 @@ if you choose the last option update package.json with:
 The pull down function only re-create in cypress' integration folder the projects and test runs as folders, including their respective keys. It will then create a template file for each test case within the testrun with the test case title and test run key (which is used to report back to QA Touch).
 If a folder or a file already exist it will be ignored.
 
-Default template code example:
+Default template code example for js:
 ```javascript
 describe("__", () => {
     it("TR-wE8hf button should do something when clicked", () => {
@@ -167,36 +167,49 @@ describe("__", () => {
 })
 
 ```
+Default template code example for Gherkin/cucumber:
+```Gherkin
+Feature: Button should do something when clicked
+  Scenario: TR-wE8hf Button should do something when clicked
+    Given
+    When
+    Then
+```
 
-## 1. Create a js file to require and invoke the folder builder function
+## 1. Create a qaPull.js file to require and invoke the folder builder function
 ```javascript
 const Builder = require("cypress-qatouch/FolderBuilder");
-
+const options = {}
 new Builder(options).buildFolders();
 ```
 
 **Options:**
 ```javascript
 options = {
-    domain: "_your_Domain_",
-    apiToken: process.env._Your_API_Token_
-    fileExt: ".your.ext.js" //Optional. Default: ".spec.js"
+    domain: process.env.QA_TOUCH_DOMAIN,
+    apiToken: process.env.QA_TOUCH_APITOKEN
     integrationFolder: "your/custom/cypress/integration/folder" //optional. Default: "cypress/integration"
     projectKeys: ["key1", "key2"] //optional. Default: [] (all projects)
     testRunKeys: ["keyA", "keyB"] //optional. Default: [] (all test runs)
+    isCucumber: true //Optional. Default: false
+    fileExt: ".your.ext.js" //Optional. Default: ".spec.js"
 }
 ```
-⚠️ You may hard code your apiToken in the file for testing but it's best practice to load it from environment variable or secret manager.
+* ⚠️ **domain** and **apiToken** can be hard coded your in the file for testing but it's more secure to load it from environment variable or secret manager. if you've done the set-up from "Secure your QA Touch credentials" (above section) then you can just add `require("dotenv").config()` at the top of your file.
+  
+* **IntegrationFolder** folder path should be relative to node current working directory (process.cwd()). If the folders don't exist, they will be created before pulling down data from QA Touch.
+  
+* **projectKeys** and **testRunKeys** can be used to filter creation of folders/files to a sub-set of projects and test runs which your api key has access to. If omitted, the script will pull all.
+  
+* **isCucumber** flag is used to determine whether to create cucumber style test case files or regular one. *See using Gherkin / Cucumber section below*
 
-IntegrationFolder folder path should be relative to node current working directory (process.cwd()). If the folders don't exist, they will be created before pulling down data from QA Touch.
-
-Creation of folders and test cases can be filter to a sub-set of projects and test runs which your api key has access to. If omitted, the script will pull all.
+* **fileExt** determines the file extension for the test case scripts. If isCucumber is set to true then this would be the file extension for the step definition file.
 
 ## 2. Set up package.json script to launch the file
 ```json
 {
     "script": {
-        "qaPull": "node ./path/to/file.js"
+        "qaPull": "node ./path/to/qaPull.js"
     }
 }
 ```
@@ -218,21 +231,17 @@ Add to package.json
   }
 ...
 ```
-Add to cypress.json
-```json
-...
-"testFiles": "**/*.{feature, features}"
-...
-```
+
 Add preprocessor to cypress/plugins/index.js
 ```javascript
 const cucumber = require('cypress-cucumber-preprocessor').default;
+require('dotenv').config();
+
 /**
  * @type {Cypress.PluginConfig}
  */
 module.exports = (on, config) => {
 
-    require('dotenv').config();
     config.reporterOptions.domain = process.env.QA_TOUCH_DOMAIN;
     config.reporterOptions.apiToken = process.env.QA_TOUCH_APITOKEN;
 
@@ -242,13 +251,25 @@ module.exports = (on, config) => {
   }
 }
 ```
-Find more set-up information for the packages on their [GitHub repo](https://github.com/TheBrainFamily/cypress-cucumber-preprocessor)
+
+
+Find more set-up information for the cypress-cucumber-preprocessor package on their [GitHub repo](https://github.com/TheBrainFamily/cypress-cucumber-preprocessor)
 
 ## 2. Pulling down from QA touch
-*Functionality not yet implemented*
+add cucumber flag to qaPull.js options object
+```Json
+...
+  isCucumber: true,
+...
+```
+then use the npm script set-up previously
+```shell
+$ npm run qaPull
+```
+
 
 ## 3. Pushing to QA touch
-Make sure that the test case Ids (TR0001 or TR-eG5d) are added to the title of the **Scenario** tag
+If you didn't use the package to pull down the feature files, ake sure that the test case Ids (TR0001 or TR-eG5d) are added to the title of the **Scenario** tag
 ```Gherkin
 Feature: Some feature title
     Scenario: TR0001 some title TR-shE9D of a Test case TR0002
@@ -257,6 +278,17 @@ Feature: Some feature title
         Then expect a certain result
 ```
 
+Replace testFiles value in cypress.json
+```json
+...
+"testFiles": "**/*.{feature, features}"
+...
+```
+
+launch test
+```shell
+$ npm test
+```
 
 # Acknowledgments
 
