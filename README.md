@@ -1,7 +1,12 @@
+# Cypress / QA Touch integration package <!-- omit in toc -->
+
+<img src="./src/assets/qa-cyLogo.png">
+
 # Table of Content <!-- omit in toc -->
-- [Cypress / QA Touch API module](#cypress--qa-touch-api-module)
-  - [⚠️ Limitations ⚠️](#️-limitations-️)
+- [Get Started](#Get-Started)
+  - [Features](#Features)
   - [Installation](#installation)
+  - [⚠️ Limitations ⚠️](#️-limitations-️)
 - [Reporter push usage](#reporter-push-usage)
   - [1. Add reporter to cypress.json](#1-add-reporter-to-cypressjson)
     - [Secure your QA Touch credentials](#secure-your-qa-touch-credentials)
@@ -19,15 +24,20 @@
 - [Acknowledgments](#acknowledgments)
 - [References](#references)
 
+# Get Started
+## Features
 
-# Cypress / QA Touch API module
-Functionalities:
 * Pulls down test cases with template test snippet including case key. Scafolding will be as followed:
 
          Project > Test run > Test Case
 
 * Pushes test results into QA Touch system.
 
+## Installation
+
+```shell
+$ npm i cypress-qatouch
+```
 
 ## ⚠️ Limitations ⚠️
 From QA Touch:
@@ -37,11 +47,6 @@ From QA Touch:
 From the package:
 * Using multiple time the same test case Id in a test file will result in an all or nothing "passed" logic. All test within a test file with the same ID must "pass" to report "passed" to QA Touch.
 
-## Installation
-
-```shell
-$ npm i cypress-qatouch
-```
 
 # Reporter push usage
 ## 1. Add reporter to cypress.json
