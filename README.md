@@ -5,6 +5,7 @@
 - [Reporter push usage](#reporter-push-usage)
   - [1. Add reporter to cypress.json](#1-add-reporter-to-cypressjson)
     - [Secure your QA Touch credentials](#secure-your-qa-touch-credentials)
+    - [Dynamic project and test run config](#dynamic-project-and-test-run-config)
   - [2. Make sure test case ID are in your test names](#2-make-sure-test-case-id-are-in-your-test-names)
   - [3. Run cypress tests](#3-run-cypress-tests)
 - [Test case pull-down and update](#test-case-pull-down-and-update)
@@ -34,7 +35,6 @@ From QA Touch:
 * Using the run_key Ids (TR-wR8dh) instead of the UI test case Ids (TR0001) will update the test case result but not the results history (each Id type use different API call)
 
 From the package:
-* For the moment the push can only be done for 1 project / 1 test run at the time. Functionality should be upgrade in the near future.
 * Using multiple time the same test case Id in a test file will result in an all or nothing "passed" logic. All test within a test file with the same ID must "passed" to report "passed" to QA Touch.
 
 ## Installation
@@ -101,6 +101,14 @@ Template .env file:
 QA_TOUCH_DOMAIN=
 QA_TOUCH_APITOKEN=
 ```
+
+### Dynamic project and test run config
+If folders have been pulled down with this package, the projectKey and testRunId added in the name of the folders will be parsed and override any configuration from cypress.json
+
+Folder Ids will be ignored if the path to the test file:
+* doesn't have any P-xxxx or R-xxxx Ids
+* only has one of the 2 required Ids
+* has more than 2 recognized patterns
 
 ## 2. Make sure test case ID are in your test names
 
