@@ -17,12 +17,32 @@ class FolderBuilder {
         this.qa = new Qatouch(options);
 
         options.isModules = options.isModules || false;
-        options.fileExt = options.fileExt || ".spec.js";
+
         options.projectKeys = options.projectKeys || [];
         options.testRunKeys = options.testRunKeys || [];
         this.filters = {
             projectKeys: options.projectKeys,
             testRunKeys: options.testRunKeys
+        }
+
+        options.fileExt = options.fileExt || ".spec.js";
+        options.isCucumber = options.isCucumber || false;
+        options.cuExt = ".feature"
+
+        this.fileTemplate = {
+            isCucumber: options.isCucumber,
+            ext: options.isCucumber ? [options.cuExt, options.fileExt] : [options.fileExt],
+            text: options.isCucumber ?
+`Feature: __CaseTitle__
+    Scenario: __CaseId__ __CaseTitle__
+        Given
+        When
+        Then`
+:`describe("__", () => {
+    it("__CaseId__ __CaseTitle__", () => {
+        //write test case final assertion here
+    })
+})`
         }
 
         options.integrationFolder = options.integrationFolder || 'cypress/integration'
@@ -87,16 +107,6 @@ class FolderBuilder {
                 }
             ];
         }
-
-        this.fileTemplate ={
-            ext: options.fileExt,
-            text: 
-`describe("__", () => {
-    it("__CaseId__ __CaseTitle__", () => {
-        //write test case final assertion here
-    })
-})`
-        } 
 
     }
 
@@ -169,36 +179,31 @@ class FolderBuilder {
     
         if(Array.isArray(data[level.array]) && data[level.array].length > 0){
             data[level.array].forEach(async el => {
-                const addKey = (level.type == "file" ? `${fileTemplate.ext}` : `${level.keyId}${el[level.key]}`)
+                
+                const addKey = (level.type == "file" ? `${fileTemplate.ext[0]}` : `${level.keyId}${el[level.key]}`)
                 const name = `${el[level.name]}${addKey}`
+
                 if(!fs.existsSync(path.join(folderPath,name))){
                     if(level.type === "folder"){
                         fsPromise.mkdir(path.join(folderPath, name))
                         .then(fileHandle => {
                             console.log(`Folder ${name} has been created`);
                             this.updateFolder(path.join(folderPath, name), el, levelsIndex, levels, fileTemplate)
-                        })
-                        .catch( err => {
-                            console.log(err);
-                        })
+                        }).catch( err => { console.log(err); })
                     }else if(level.type === "file"){
-                        let fileName = name;
-                        fsPromise.open(path.join(folderPath, fileName), "a")
-                        .then(async fileHandle => {
-                            console.log(`File ${fileName} has been created`);                        
-                            
-                            let testCase = fileTemplate.text;
-                            testCase = testCase.replace(/__CaseId__/, `${level.keyId}${el[level.key]}`);
-                            testCase = testCase.replace(/__CaseTitle__/,el[level.name]);
-                            await fsPromise.appendFile(fileHandle, testCase);
-                            
-                            console.log(`Template test case has been appended to file ${fileName}`);                        
-    
-                            fileHandle.close();
-                        })
-                        .catch(err => {
-                            console.log(`The file creation didn't work error was:\n ${err}`);
-                        })
+                                                
+                        let testCase = fileTemplate.text;
+                        testCase = testCase.replace(/__CaseId__/, `${level.keyId}${el[level.key]}`);
+                        testCase = testCase.replace(/__CaseTitle__/g,el[level.name]);
+                        
+                        let file = {
+                            fileName: el[level.name],
+                            fileExt: fileTemplate.ext,
+                            content:testCase
+                        }
+
+                        createTemplateFiles(folderPath, file, fileTemplate.isCucumber)
+
                     }else{
                         console.error(`level type not recognized. please check level mapping array.`)
                     }
@@ -211,6 +216,51 @@ class FolderBuilder {
                 }
             });
         }
+
+        /**
+         * Create template file or file(s) & folder depending whether isCucumber flag is false or true
+         * 
+         * @param {string} rootfolderPath base folder where the files should be created
+         * @param {string[]} file file object -> {fileName: string, fileExt:string[], content: string}
+         * @param {boolean} isCucumber flag whether should create cucumber structure or not
+         */
+        function createTemplateFiles(rootfolderPath, file, isCucumber = false) {
+            makeFile(rootfolderPath, `${file.fileName}${file.fileExt[0]}`, file.content)
+                .then(async () => {
+                    if (isCucumber) {
+                        fsPromise.mkdir(path.join(rootfolderPath, file.fileName))
+                            .then(fileHandle => {
+                                console.log(`Folder ${file.fileName} has been created`);
+                                makeFile(path.join(rootfolderPath, file.fileName), `${file.fileName}${file.fileExt[1]}`)
+                            }).catch(err => { console.log(err); })
+                    }
+                })
+                .catch((err) => { throw err })
+        }
+
+        /**
+         * 
+         * @param {*} rootfolderPath full path to the folder where files should be created (incl. cwd)
+         * @param {*} fileName name of the file including file extension
+         * @param {*} templateText template text which need to be added to the file
+         */
+        async function makeFile(rootfolderPath, fileName, templateText = "") {
+            fsPromise.open(path.join(rootfolderPath, fileName), "a")
+                .then(async fileHandle => {
+                    console.log(`File ${fileName} has been created`);
+
+                    await fsPromise.appendFile(fileHandle, templateText);
+
+                    console.log(`Template test case has been appended to file ${fileName}`);
+
+                    fileHandle.close();
+                })
+                .catch(err => {
+                    console.log(`The file creation didn't work error was:\n ${err}`);
+                    return err;
+                })
+        }
+
     }
 
     buildFolders(){
@@ -244,9 +294,9 @@ class FolderBuilder {
      * @param {string[]} paths array of folder names
      * @returns 
      */
-    makeFolder(folderPath, paths) {
+    makeFolder(rootfolderPath, paths) {
         if (paths.length > 0) {
-            let newFolder = path.join(folderPath, paths[0])
+            let newFolder = path.join(rootfolderPath, paths[0])
             fs.mkdir(newFolder, () => {
                 paths.shift();
                 this.makeFolder(newFolder, paths);
@@ -255,7 +305,7 @@ class FolderBuilder {
             return;
         }
     }
-}
 
+}
 
 module.exports = FolderBuilder;
