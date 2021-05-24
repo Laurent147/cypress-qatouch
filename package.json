@@ -4,7 +4,15 @@
   "description": "QA touch - cypress integration module",
   "main": "./index.js",
   "scripts": {
-    "test": "cypress run"
+    "test": "mocha ./**/*$MATCH.spec.js",
+    "cy:run": "cypress run",
+    "cy:open": "cypress open",
+    "cy:watch": "nodemon -e js,jsx,ts,tsx,css,scss --exec cypress run",
+    "cycu:run": "IS_CUCUMBER=true cypress run",
+    "qa:pull": "node tests/qaPull.js",
+    "qa:push": "cypress run -C cypress-reporter.json",
+    "qacu:pull": "IS_CUCUMBER=true node tests/qaPull.js",
+    "qacu:push": "IS_CUCUMBER=true cypress run -C cypress-reporter.json"
   },
   "keywords": [
     "spec",
@@ -29,6 +37,10 @@
   },
   "homepage": "https://github.com/Laurent147/cypress-qatouch-api#readme",
   "devDependencies": {
-    "cypress": "^6.8.0"
+    "cypress": "^7.3.0",
+    "cypress-cucumber-preprocessor": "^4.1.0",
+    "cypress-promise": "^1.1.0",
+    "dotenv": "^9.0.2",
+    "nodemon": "^2.0.7"
   }
 }

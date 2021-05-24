@@ -1,0 +1,8 @@
+{
+    "integrationFolder": "tests",
+    "testFiles": "**/*.spec.js",
+    "headless": true,
+    "video": true,
+    "screenshotOnRunFailure": false,
+    "chromeWebSecurity": false
+}
