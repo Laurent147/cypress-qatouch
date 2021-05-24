@@ -75,6 +75,17 @@ class Qatouch{
     }
 
     /**
+     * Download BDD test case steps
+     * @param {string} projectKey 
+     * @param {string} caseId 
+     * @returns 
+     */
+    getBddTestCaseSteps(projectKey, caseId){
+        let endPoint = `bdd/case/${projectKey}/download/${caseId}`
+        return this.qaTouchApiCall('GET', endPoint, false)
+    }
+
+    /**
      * getAllTestRuns function
      * 
      * Retrieve list of all test runs for a QA Touch project ID
@@ -122,13 +133,16 @@ class Qatouch{
      * 
      * the array of test results to QA Touch
      * @param   {*} results one test results onject. {case: string, status: string}
+     * @param {string} comment comment to be added to the test results
      * @param   {string} projectKey [optional] Qa touch project id
      * @param   {string} testRunKey array of test results. [{case: string, status: string}]
      * @returns <Promise> fullfills json response { success: boolean, msg: string }
      */
-    publishOneResult(result, projectKey = this.options.projectKey, testRunKey = this.options.testRunId) {
+    publishOneResult(result, comment='', projectKey = this.options.projectKey, testRunKey = this.options.testRunId) {
+        comment = comment === '' ? 'Published from automated testing' : comment;
+
         let endPoint = `testRunResults/status?status=${result.status}&project=${projectKey}
-                        &test_run=${testRunKey}&run_result=${result.case}`
+                        &test_run=${testRunKey}&run_result=${result.case}&comments=${comment}`
 
         return this.qaTouchApiCall('PATCH', endPoint, false)
     }
