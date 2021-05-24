@@ -3,8 +3,8 @@
 <img src="./src/assets/qa-cyLogo.png">
 
 # Table of Content <!-- omit in toc -->
-- [Get Started](#Get-Started)
-  - [Features](#Features)
+- [Get Started](#get-started)
+  - [Features](#features)
   - [Installation](#installation)
   - [⚠️ Limitations ⚠️](#️-limitations-️)
 - [Reporter push usage](#reporter-push-usage)
@@ -42,9 +42,9 @@ $ npm i cypress-qatouch
 ## ⚠️ Limitations ⚠️
 From QA Touch:
 * Test Run Module structure isn't available through QA Touch's api at the moment so all test cases are created in test run level folder.
-* Using the run_key Ids (TR-wR8dh) instead of the UI test case Ids (TR0001) will update the test case result but not the results history (each Id type use different API call)
 
 From the package:
+* Test case step download, only available for BDD test case
 * Using multiple time the same test case Id in a test file will result in an all or nothing "passed" logic. All test within a test file with the same ID must "pass" to report "passed" to QA Touch.
 
 
@@ -160,8 +160,17 @@ if you choose the last option update package.json with:
 
 
 # Test case pull-down and update
-The pull down function only re-create in cypress' integration folder the projects and test runs as folders, including their respective keys. It will then create a template file for each test case within the testrun with the test case title and test run key (which is used to report back to QA Touch).
-If a folder or a file already exist it will be ignored.
+The pull down function only re-create in cypress' integration folder the projects and test runs as folders, including their respective keys. It will then create a test file for each test case within the testrun. 
+
+Test file can be created either based on:
+* Template (default or gherkin/cucumber) 
+
+  Each file will include the test case title and test run key (which is used to report back to QA Touch). If a file already exist **it will be ignored**.
+* The BDD steps defined in QA Touch.
+
+  Each file will include the BDD steps from QA Touch and the test run key merged into `Scenario` tag. If a file already exist, **the content will be replaced by QA Touch content if different**.
+
+  >⚠️ Only work for BDD (cucumber/gherkin) test cases, not for Steps test cases.
 
 Default template code example for js:
 ```javascript
@@ -192,11 +201,12 @@ new Builder(options).buildFolders();
 ```javascript
 options = {
     domain: process.env.QA_TOUCH_DOMAIN,
-    apiToken: process.env.QA_TOUCH_APITOKEN
-    integrationFolder: "your/custom/cypress/integration/folder" //optional. Default: "cypress/integration"
-    projectKeys: ["key1", "key2"] //optional. Default: [] (all projects)
-    testRunKeys: ["keyA", "keyB"] //optional. Default: [] (all test runs)
-    isCucumber: true //Optional. Default: false
+    apiToken: process.env.QA_TOUCH_APITOKEN,
+    integrationFolder: "your/custom/cypress/integration/folder", // Optional. Default: "cypress/integration"
+    projectKeys: ["key1", "key2"], // Optional. Default: [] (all projects)
+    testRunKeys: ["keyA", "keyB"], // Optional. Default: [] (all test runs)
+    isCucumber: true, // Optional. Default: false
+    downloadSteps: true, // Optional. Default: false
     fileExt: ".your.ext.js" //Optional. Default: ".spec.js"
 }
 ```
@@ -207,6 +217,11 @@ options = {
 * **projectKeys** and **testRunKeys** can be used to filter creation of folders/files to a sub-set of projects and test runs which your api key has access to. If omitted, the script will pull all.
   
 * **isCucumber** flag is used to determine whether to create cucumber style test case files or regular one. *See using Gherkin / Cucumber section below*
+
+* **downloadSteps** flag is used to enable downloading BDD test case steps from QA touch, mergin require testrun key required for reporting and insert that into the `.feature` file (instead of the BDD template).
+  * If the `.feature` file already exist, the content will be replaced by QA Touch content if different. 
+  * Step definition files are not checked or updated.
+  * ⚠️ **isCucumber** must be **true**
 
 * **fileExt** determines the file extension for the test case scripts. If isCucumber is set to true then this would be the file extension for the step definition file.
 
@@ -265,6 +280,7 @@ add cucumber flag to qaPull.js options object
 ```Json
 ...
   isCucumber: true,
+  downloadSteps: true // Optional 
 ...
 ```
 then use the npm script set-up previously

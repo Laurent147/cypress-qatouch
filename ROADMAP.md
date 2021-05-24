@@ -15,5 +15,6 @@
 
 ## Other
 * [x] Review README and add cucumber-preproc option explanationß
-* [ ] Add unit testing for package
+* [ ] (*WIP*) Add unit testing for package
 * [ ] look into support for typescript and how to set it up
+
