@@ -42,6 +42,7 @@ $ npm i cypress-qatouch
 ## ⚠️ Limitations ⚠️
 From QA Touch:
 * Test Run Module structure isn't available through QA Touch's api at the moment so all test cases are created in test run level folder.
+* For the BDD test case steps download to work properly the test case names must be unique within a project.
 
 From the package:
 * Test case step download, only available for BDD test case
