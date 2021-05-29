@@ -42,7 +42,6 @@ $ npm i cypress-qatouch
 ## ⚠️ Limitations ⚠️
 From QA Touch:
 * Test Run Module structure isn't available through QA Touch's api at the moment so all test cases are created in test run level folder.
-* For the BDD test case steps download to work properly the test case names must be unique within a project.
 
 From the package:
 * Test case step download, only available for BDD test case
@@ -219,7 +218,7 @@ options = {
   
 * **isCucumber** flag is used to determine whether to create cucumber style test case files or regular one. *See using Gherkin / Cucumber section below*
 
-* **downloadSteps** flag is used to enable downloading BDD test case steps from QA touch, mergin require testrun key required for reporting and insert that into the `.feature` file (instead of the BDD template).
+* **downloadSteps** flag is used to enable downloading of BDD test case steps from QA touch, mergin required testrun key used for reporting into Scenario statements and insert that into the `.feature` file (instead of the BDD template).
   * If the `.feature` file already exist, the content will be replaced by QA Touch content if different. 
   * Step definition files are not checked or updated.
   * ⚠️ **isCucumber** must be **true**
