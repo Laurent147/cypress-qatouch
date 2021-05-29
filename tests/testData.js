@@ -35,6 +35,58 @@ const testCaseList = [
   }
 ];
 
+const testRunCases = [
+  {
+    run_key: 'p8Ra3',
+    case_id: 'LqZ2J',
+    title: 'Submod test',
+    status: 'Failed',
+    assigned_user: 'Laurent Burte  '
+  },
+  {
+    run_key: 'LXn4J',
+    case_id: '7lVJX',
+    title: 'Spotifyfollow',
+    status: 'Failed',
+    assigned_user: 'Laurent Burte  '
+  },
+  {
+    run_key: 'jpL1a',
+    case_id: '9mB1r',
+    title: 'login',
+    status: 'Failed',
+    assigned_user: 'Laurent Burte  '
+  },
+  {
+    run_key: '48alw',
+    case_id: 'qg2dP',
+    title: 'login 2',
+    status: 'Failed',
+    assigned_user: 'Laurent Burte  '
+  },
+  {
+    run_key: 'vX98z',
+    case_id: 'RMD3l',
+    title: 'test case 15',
+    status: 'Retest',
+    assigned_user: 'Laurent Burte  '
+  },
+  {
+    run_key: 'b4WdR',
+    case_id: 'd9mRW',
+    title: 'test case 14',
+    status: 'Retest',
+    assigned_user: 'Laurent Burte  '
+  },
+  {
+    run_key: 'LmM1e',
+    case_id: 'n34kV',
+    title: 'Steps test case',
+    status: 'Retest',
+    assigned_user: 'Laurent Burte  '
+  }
+];
+
 const dataToMerge = {
   projects: [
     {
@@ -89,36 +141,6 @@ const dataToMerge = {
             }
           ]
         }
-      ],
-      testCases: [
-        {
-          case_title: 'login',
-          case_key: '9mB1r'
-        },
-        {
-          case_title: 'login 2',
-          case_key: 'qg2dP'
-        },
-        {
-          case_title: 'Submod test',
-          case_key: 'LqZ2J'
-        },
-        {
-          case_title: 'Spotifyfollow',
-          case_key: '7lVJX'
-        },
-        {
-          case_title: 'test case 15',
-          case_key: 'RMD3l'
-        },
-        {
-          case_title: 'test case 14',
-          case_key: 'd9mRW'
-        },
-        {
-          case_title: 'Steps test case',
-          case_key: 'n34kV'
-        }
       ]
     },
     {
@@ -142,16 +164,6 @@ const dataToMerge = {
               assigned_user: 'Laurent Burte  '
             }
           ]
-        }
-      ],
-      testCases: [
-        {
-          case_title: 'Click the log out link',
-          case_key: 'LqjKJ'
-        },
-        {
-          case_title: 'Sign up for Spotify presave campaign',
-          case_key: '0jMXl'
         }
       ]
     }
@@ -173,81 +185,51 @@ const mergedData = {
               title: 'Submod test',
               status: 'Failed',
               assigned_user: 'Laurent Burte  ',
-              case_key: 'LqZ2J'
+              case_id: 'LqZ2J'
             },
             {
               run_key: 'LXn4J',
               title: 'Spotifyfollow',
               status: 'Failed',
               assigned_user: 'Laurent Burte  ',
-              case_key: '7lVJX'
+              case_id: '7lVJX'
             },
             {
               run_key: 'jpL1a',
               title: 'login',
               status: 'Failed',
               assigned_user: 'Laurent Burte  ',
-              case_key: '9mB1r'
+              case_id: '9mB1r'
             },
             {
               run_key: '48alw',
               title: 'login 2',
               status: 'Failed',
               assigned_user: 'Laurent Burte  ',
-              case_key: 'qg2dP'
+              case_id: 'qg2dP'
             },
             {
               run_key: 'vX98z',
               title: 'test case 15',
               status: 'Untested',
               assigned_user: 'Laurent Burte  ',
-              case_key: 'RMD3l'
+              case_id: 'RMD3l'
             },
             {
               run_key: 'b4WdR',
               title: 'test case 14',
               status: 'Untested',
               assigned_user: 'Laurent Burte  ',
-              case_key: 'd9mRW'
+              case_id: 'd9mRW'
             },
             {
               run_key: 'LmM1e',
               title: 'Steps test case',
               status: 'Untested',
               assigned_user: 'Laurent Burte  ',
-              case_key: 'n34kV'
+              case_id: 'n34kV'
             }
           ]
-        }
-      ],
-      testCases: [
-        {
-          case_title: 'login',
-          case_key: '9mB1r'
-        },
-        {
-          case_title: 'login 2',
-          case_key: 'qg2dP'
-        },
-        {
-          case_title: 'Submod test',
-          case_key: 'LqZ2J'
-        },
-        {
-          case_title: 'Spotifyfollow',
-          case_key: '7lVJX'
-        },
-        {
-          case_title: 'test case 15',
-          case_key: 'RMD3l'
-        },
-        {
-          case_title: 'test case 14',
-          case_key: 'd9mRW'
-        },
-        {
-          case_title: 'Steps test case',
-          case_key: 'n34kV'
         }
       ]
     },
@@ -264,26 +246,16 @@ const mergedData = {
               title: 'Sign up for Spotify presave campaign',
               status: 'Failed',
               assigned_user: 'Laurent Burte  ',
-              case_key: '0jMXl'
+              case_id: '0jMXl'
             },
             {
               run_key: 'LXdJW',
               title: 'Click the log out link',
               status: 'Failed',
               assigned_user: 'Laurent Burte  ',
-              case_key: 'LqjKJ'
+              case_id: 'LqjKJ'
             }
           ]
-        }
-      ],
-      testCases: [
-        {
-          case_title: 'Click the log out link',
-          case_key: 'LqjKJ'
-        },
-        {
-          case_title: 'Sign up for Spotify presave campaign',
-          case_key: '0jMXl'
         }
       ]
     }
@@ -305,7 +277,7 @@ const DLdata = {
               title: 'Submod test',
               status: 'Failed',
               assigned_user: 'Laurent Burte  ',
-              case_key: 'LqZ2J',
+              case_id: 'LqZ2J',
               caseSteps:
                 'Feature : Testing the sub module\n\tGiven a sub module\n\tWhen we call the all module api\n\tThen this module should pop up in the list\n'
             },
@@ -314,7 +286,7 @@ const DLdata = {
               title: 'Spotifyfollow',
               status: 'Failed',
               assigned_user: 'Laurent Burte  ',
-              case_key: '7lVJX',
+              case_id: '7lVJX',
               caseSteps:
                 'Feature : Some important feature name\n\tBackground the background of this re-usable feature is amazing\nScenario : Trying the re-usable script\n\tGiven Given a new tool like QA touch\n\tWhen I create a new re-usable script\n\tThen I should be able to understand how this work\n'
             },
@@ -323,7 +295,7 @@ const DLdata = {
               title: 'login',
               status: 'Failed',
               assigned_user: 'Laurent Burte  ',
-              case_key: '9mB1r',
+              case_id: '9mB1r',
               caseSteps:
                 'Feature : Sign in to mira dev\nScenario : SC01 Sign in with a valid username and password\n\tGiven The user visit the mira dev log in page\n\tAnd types in a username and password\n\tWhen the user clicks on the sign in button\n\tThen the user should land on campaign page\n'
             },
@@ -332,7 +304,7 @@ const DLdata = {
               title: 'login 2',
               status: 'Failed',
               assigned_user: 'Laurent Burte  ',
-              case_key: 'qg2dP',
+              case_id: 'qg2dP',
               caseSteps:
                 'Feature : Sign in to mira dev\nScenario : SC01 Sign in with a valid username and password\n\tGiven The user visit the mira dev log in page\n\tAnd types in a username and password\n\tWhen the user clicks on the sign in button\n\tThen the user should land on campaign page\n'
             },
@@ -341,7 +313,7 @@ const DLdata = {
               title: 'test case 15',
               status: 'Untested',
               assigned_user: 'Laurent Burte  ',
-              case_key: 'RMD3l',
+              case_id: 'RMD3l',
               caseSteps:
                 'Feature : Some important feature name\n\tBackground the background of this re-usable feature is amazing\nScenario : Trying the re-usable script\n\tGiven Given a new tool like QA touch\n\tWhen I create a new re-usable script\n\tThen I should be able to understand how this work\n'
             },
@@ -350,7 +322,7 @@ const DLdata = {
               title: 'test case 14',
               status: 'Untested',
               assigned_user: 'Laurent Burte  ',
-              case_key: 'd9mRW',
+              case_id: 'd9mRW',
               caseSteps:
                 'Feature : Some important feature name\n\tBackground the background of this re-usable feature is amazing\nScenario : Trying the re-usable script\n\tGiven Given a new tool like QA touch\n\tWhen I create a new re-usable script\n\tThen I should be able to understand how this work\n'
             },
@@ -359,40 +331,10 @@ const DLdata = {
               title: 'Steps test case',
               status: 'Untested',
               assigned_user: 'Laurent Burte  ',
-              case_key: 'n34kV',
+              case_id: 'n34kV',
               caseSteps: ''
             }
           ]
-        }
-      ],
-      testCases: [
-        {
-          case_title: 'login',
-          case_key: '9mB1r'
-        },
-        {
-          case_title: 'login 2',
-          case_key: 'qg2dP'
-        },
-        {
-          case_title: 'Submod test',
-          case_key: 'LqZ2J'
-        },
-        {
-          case_title: 'Spotifyfollow',
-          case_key: '7lVJX'
-        },
-        {
-          case_title: 'test case 15',
-          case_key: 'RMD3l'
-        },
-        {
-          case_title: 'test case 14',
-          case_key: 'd9mRW'
-        },
-        {
-          case_title: 'Steps test case',
-          case_key: 'n34kV'
         }
       ]
     },
@@ -409,30 +351,20 @@ const DLdata = {
               title: 'Sign up for Spotify presave campaign',
               status: 'Failed',
               assigned_user: 'Laurent Burte  ',
-              case_key: '0jMXl',
+              case_id: '0jMXl',
               caseSteps:
-                "Feature :     Prompt fan to sign up with his / her Spotify account  \nScenario : Prompt fan to sign up with his / her Spotify account\n\tGiven a campaign with Spotify presave action\n\tWhen fan clicks the Sportify presave action button\n\tThen  user is prompted to log in with his / her Spotify credentials\nScenario : Fan signs up for campaign's Spotify presave\n\tGiven  a fan is prompted to log in with his / her Spotify credentials\n\tAnd credentials are entered\n\tWhen connect button is clicked\n\tThen fan should see thank you page\n"
+                "Feature : Prompt fan to sign up with his / her Spotify account   \nScenario : Prompt fan to sign up with his / her Spotify account\n\tGiven a campaign with Spotify presave action\n\tWhen fan clicks the Sportify presave action button\n\tThen  user is prompted to log in with his / her Spotify credentials\nScenario : Fan signs up for campaign's Spotify presave\n\tGiven  a fan is prompted to log in with his / her Spotify credentials\n\tAnd credentials are entered\n\tWhen connect button is clicked\n\tThen fan should see thank you page\n"
             },
             {
               run_key: 'LXdJW',
               title: 'Click the log out link',
               status: 'Failed',
               assigned_user: 'Laurent Burte  ',
-              case_key: 'LqjKJ',
+              case_id: 'LqjKJ',
               caseSteps:
                 'Feature : Click the log out link\n\tGiven user is logged in\n\tAnd is using Mira Editor\n\tWhen he /she clicks the log out link\n\tThen user should be logout and redirected to login page\n'
             }
           ]
-        }
-      ],
-      testCases: [
-        {
-          case_title: 'Click the log out link',
-          case_key: 'LqjKJ'
-        },
-        {
-          case_title: 'Sign up for Spotify presave campaign',
-          case_key: '0jMXl'
         }
       ]
     }
@@ -583,10 +515,11 @@ const levels = [
 
 module.exports = {
   project: 'vEyp',
-  testRunId: '',
-  bddCaseId: 'd9mRW',
+  testRunId: 'g67W',
+  bddCaseId: 'LqZ2J',
   stepCaseId: 'n34kV',
   testCaseList,
+  testRunCases,
   bddCaseDef,
   dataToMerge,
   mergedData,

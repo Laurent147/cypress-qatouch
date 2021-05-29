@@ -13,13 +13,6 @@ const options = {
 
 var builder = new FolderBuilder(options);
 
-describe('merge test case & test run', () => {
-  it('Should merge case object into testrun testcases', () => {
-    let res = builder.mergeTestCaseID(dataToMerge);
-    expect(JSON.stringify(res)).to.equal(JSON.stringify(mergedData));
-  });
-});
-
 describe('downlaod BDD test case steps', () => {
   it('Should download and add BDD test case steps', async () => {
     let res;
@@ -62,7 +55,7 @@ describe('Generate test case steps from template', () => {
   }
 });
 
-describe.only('Generate test case steps from template', () => {
+describe('Generate test case steps from download', () => {
   let newOptions = {
     downloadSteps: true,
     isCucumber: true

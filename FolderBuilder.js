@@ -164,12 +164,6 @@ class FolderBuilder {
           );
         }
 
-        if (this.options.downloadSteps) {
-          proj.testCases = [];
-          let testCases = await this.qa.getAllTestCases(proj.project_key);
-          proj.testCases.push(...testCases);
-        }
-
         return await Promise.all(
           proj.testRuns.map(async (testRun) => {
             testRun.results = [];
@@ -388,7 +382,7 @@ class FolderBuilder {
           proj.testRuns.map(async (testRun) => {
             testRun.results = await Promise.all(
               testRun.results.map(async (res) => {
-                res.caseSteps = await this.qa.getBddTestCaseSteps(proj.project_key, res.case_key);
+                res.caseSteps = await this.qa.getBddTestCaseSteps(proj.project_key, res.case_id);
                 return res;
               })
             );
@@ -410,7 +404,7 @@ class FolderBuilder {
     if (this.options.downloadSteps && this.options.isCucumber && el[level.steps] !== '') {
       testCase += el[level.steps];
 
-      testCase = this.processDlTestCase(testCase, testID, testTitle);
+      testCase = this.mergeDlTestCase(testCase, testID, testTitle);
 
       testCase = `# Test case key: ${el[level.caseId]}\n\n` + testCase;
     } else {
@@ -422,7 +416,7 @@ class FolderBuilder {
     return testCase;
   }
 
-  processDlTestCase(stepsText, scenarioId, scenarioText) {
+  mergeDlTestCase(stepsText, scenarioId, scenarioText) {
     //replaces all kind of line feed by '__lineFeed__'
     stepsText = stepsText.replace(/(\t)/gm, '');
     stepsText = stepsText.replace(/(\r\n|\r|\n)/gm, '__lineFeed__');
@@ -458,7 +452,8 @@ class FolderBuilder {
   buildFolders() {
     this.buildQaData(this.filters).then(async (res) => {
       if (this.options.downloadSteps) {
-        res = await this.downloadBddSteps(this.mergeTestCaseID(res));
+        console.log(JSON.stringify(res, null, 2));
+        res = await this.downloadBddSteps(res); //this.mergeTestCaseID(res));
       }
       this.updateFolder(this.baseFolderPath, res, -1, this.levels, this.fileTemplate);
     });
